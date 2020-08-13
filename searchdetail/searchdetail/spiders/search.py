@@ -13,6 +13,7 @@ from ..items import SearchdetailItem
 
 class SearchSpider(scrapy.Spider):
     name = 'search'
+
     website_name = []
     website_type = []
     duplicate = []
@@ -27,14 +28,25 @@ class SearchSpider(scrapy.Spider):
             wait_time=1000,
             screenshot=True,
             callback=self.parse,
-            meta={'index': index},
+            meta={'index': index, 'dont_merge_cookies': True},
             dont_filter=True
         )
 
     def parse(self, response):
-
         driver = response.meta['driver']
         index = response.meta['index']
+
+        if (index % 3 == 0):
+            # for check
+            time.sleep(9)
+        elif (index % 3 == 1):
+            # for check
+            time.sleep(17)
+        else:
+            # for check
+            time.sleep(3)
+        # time.sleep(120)
+
         if (index > 0):
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
@@ -95,6 +107,9 @@ class SearchSpider(scrapy.Spider):
             self.city = city_name[index]
             index += 1
 
+            #for check
+            time.sleep(11)
+
             print('\n' * 2)
             print('Above yield to parse_page')
             print('\n' * 2)
@@ -104,7 +119,7 @@ class SearchSpider(scrapy.Spider):
                 screenshot=True,
                 callback=self.parse_page,
                 errback=self.errback_parse_page,
-                meta={'index': index},
+                meta={'index': index,'dont_merge_cookies': True},
                 dont_filter=True
             )
 
@@ -112,6 +127,7 @@ class SearchSpider(scrapy.Spider):
         Searchdetails_item = SearchdetailItem()
         driver = response.meta['driver']
         index = response.meta['index']
+        # traffic_url = response.meta['traffic_url']
 
         if (response.url == 'https://www.google.com/'):
             finalemail = response.meta['finalemail']
@@ -141,14 +157,29 @@ class SearchSpider(scrapy.Spider):
             print('\n' * 2)
             # time.sleep(8)
 
+
             try:
-                WebDriverWait(driver, 100).until(
+                WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.ID, "tvcap"))
                 )
             except:
+                html = driver.page_source
+                response_obj = Selector(text=html)
+
+                url = response_obj.xpath("//div/div/text()").extract()
+                new_url=url[-2].split(' ')
+                print("\n"*2)
+                print('check this url',new_url)
+                print("\n" * 2)
+                body = driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL+'t')
+                driver.get(new_url[1])
+
+                # driver.switch_to_window(driver.window_handles[2])
+                # time.sleep(10)
                 print('\n' * 2)
-                print('tvcap except', driver.current_url)
+                print('tvcap except',driver.current_url)
                 print('\n' * 2)
+
 
             details = response.xpath('//div[@id="tvcap"]/div/div/ol/li/div[1]')
 
@@ -163,7 +194,7 @@ class SearchSpider(scrapy.Spider):
                 print('\n' * 2)
                 print('name', name)
                 print('\n' * 2)
-                if (name != None):
+                if(name!=None):
                     name_list = name.split('/')
                     if ('http://' not in name_list[0]):
                         name_added = 'http://' + name_list[0]
@@ -189,7 +220,7 @@ class SearchSpider(scrapy.Spider):
                 print('\n' * 2)
                 print('name', name)
                 print('\n' * 2)
-                if (name != None):
+                if(name!=None):
                     name_list = name.split('/')
                     if ('http://' not in name_list[0]):
                         name_added = 'http://' + name_list[0]
@@ -206,13 +237,38 @@ class SearchSpider(scrapy.Spider):
             print('check wait')
             print('\n' * 2)
 
+            #some try
+            # time.sleep(60)
+            details = response.xpath('//div[@class="X2Dase irChYb"]')
+            for detail in details:
+
+                name = detail.xpath('.//span[2]/span/text()').get()
+                if (name == None):
+                    print('\n' * 2)
+                    print('gone for second xpath')
+                    print('\n' * 2)
+                    name = detail.xpath('.//div/cite/text()').get()
+                print('\n' * 2)
+                print('name', name)
+                print('\n' * 2)
+                if(name!=None):
+                    name_list = name.split('/')
+                    if ('http://' not in name_list[0]):
+                        name_added = 'http://' + name_list[0]
+                    if (name_added not in self.duplicate and 'www.' in name_added):
+                        self.duplicate.append(name_added)
+                        self.website_name.append(name_added)
+                        self.website_type.append('organic')
+
+
+
             try:
                 WebDriverWait(driver, 100).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "i0vbXd"))
                 )
             except:
                 print('\n' * 2)
-                print('i0vbXd except', driver.current_url)
+                print('i0vbXd except',driver.current_url)
                 print('\n' * 2)
 
             time.sleep(3)
@@ -240,8 +296,9 @@ class SearchSpider(scrapy.Spider):
                 click_moreads.click()
             except:
                 print('\n' * 2)
-                print('rso except', driver.current_url)
+                print('rso except',driver.current_url)
                 print('\n' * 2)
+
 
             driver = response.meta['driver']
             print('\n' * 2)
@@ -270,8 +327,8 @@ class SearchSpider(scrapy.Spider):
                 print('name', name)
                 print('\n' * 2)
                 # name_list = name.split('/')
-                if (name != None):
-                    if ('http://' in name or 'https://' in name):
+                if(name!=None):
+                    if ('http://' in name or 'https://'  in name):
                         pass
                     else:
                         name = 'http://' + name
@@ -307,7 +364,7 @@ class SearchSpider(scrapy.Spider):
                 screenshot=True,
                 callback=self.emailtrack,
                 errback=self.emailtrack_errback,
-                meta={'index': index, 'web_name': web_url, 'web_type': web_type},
+                meta={'index': index, 'web_name': web_url, 'web_type': web_type,'dont_merge_cookies': True},
                 dont_filter=True
             )
         else:
@@ -320,7 +377,7 @@ class SearchSpider(scrapy.Spider):
                 screenshot=True,
                 callback=self.parse,
                 errback=self.parse_errback,
-                meta={'index': index},
+                meta={'index': index,'dont_merge_cookies': True},
                 dont_filter=True
             )
 
@@ -355,7 +412,7 @@ class SearchSpider(scrapy.Spider):
                 callback=self.finalemail,
                 errback=self.errback_finalemail,
                 meta={'index': index, 'web_name': web_name, 'web_type': web_type, 'uniqueemail': uniqueemail,
-                      'links': links},
+                      'links': links,'dont_merge_cookies': True},
                 dont_filter=True
             )
         else:
@@ -367,7 +424,7 @@ class SearchSpider(scrapy.Spider):
                 callback=self.parse_page,
                 errback=self.errback_google,
                 meta={'index': index, 'web_name': web_name, 'web_type': web_type, 'finalemail': finalemail,
-                      'links': links},
+                      'links': links,'dont_merge_cookies': True},
                 dont_filter=True
             )
 
@@ -419,7 +476,7 @@ class SearchSpider(scrapy.Spider):
                 errback=self.errback_finalemail,
                 dont_filter=True,
                 meta={'web_name': web_name, 'web_type': web_type, 'uniqueemail': uniqueemail, 'links': links,
-                      'index': index}
+                      'index': index,'dont_merge_cookies': True}
 
             )
         else:
@@ -445,42 +502,26 @@ class SearchSpider(scrapy.Spider):
                 errback=self.errback_google,
                 dont_filter=True,
                 meta={'web_name': web_name, 'web_type': web_type, 'links': links, 'finalemail': finalemail,
-                      'index': index}
+                      'index': index,'dont_merge_cookies': True}
 
             )
 
     def emailtrack_errback(self, failure):
         meta = failure.request.meta
-        web_url = meta['web_url']
+        web_name = meta['web_name']
         web_type = meta['web_type']
         index = meta['index']
+        finalemail = []
 
-        print('\n' * 2)
-        print('I am in emailtrack errback')
-        print('\n' * 2)
-
-        if (len(web_url) > 1):
-            web_url.pop(0)
-            url = web_url[0]
-            yield SeleniumRequest(
-                url=url,
-                wait_time=1000,
-                screenshot=True,
-                callback=self.emailtrack,
-                errback=self.emailtrack_errback,
-                meta={'index': index, 'web_name': web_url, 'web_type': web_type},
-                dont_filter=True
-            )
-        else:
-            yield SeleniumRequest(
-                url='http://isearchfrom.com/',
-                wait_time=1000,
-                screenshot=True,
-                callback=self.parse,
-                errback=self.parse_errback,
-                meta={'index': index},
-                dont_filter=True
-            )
+        yield SeleniumRequest(
+            url='https://www.google.com/',
+            wait_time=1000,
+            screenshot=True,
+            callback=self.parse_page,
+            errback=self.errback_google,
+            meta={'index': index, 'web_name': web_name, 'web_type': web_type,'finalemail':finalemail},
+            dont_filter=True
+        )
 
     def parse_errback(self, failure):
         meta = failure.request.meta
@@ -547,7 +588,7 @@ class SearchSpider(scrapy.Spider):
             screenshot=True,
             callback=self.parse,
             errback=self.parse_errback,
-            meta={'index': index},
+            meta={'index': index,'dont_merge_cookies': True},
             dont_filter=True
         )
 
@@ -563,5 +604,3 @@ class SearchSpider(scrapy.Spider):
             meta=meta,
             dont_filter=True
         )
-
-

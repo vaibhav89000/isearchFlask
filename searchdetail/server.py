@@ -66,26 +66,26 @@ def my_form_post():
     return redirect('http://127.0.0.1:5000/home')
 
 
-@app.route('/run')
-def run():
-    """
-    Run spider in another process and store items in file. Simply issue command:
-
-    > scrapy crawl dmoz -o "output.json"
-
-    wait for  this command to finish, and read output.json to client.
-    """
-
-    # p = subprocess.Popen(...)
-    # """
-    # A None value indicates that the process hasn't terminated yet.
-    # """
-    # poll = p.poll()
-    # if poll == None:
-    spider_name = "search"
-    subprocess.check_output(['scrapy', 'crawl', spider_name])
-
-    return redirect('http://127.0.0.1:5000/view')
+# @app.route('/run')
+# def run():
+#     """
+#     Run spider in another process and store items in file. Simply issue command:
+#
+#     > scrapy crawl dmoz -o "output.json"
+#
+#     wait for  this command to finish, and read output.json to client.
+#     """
+#
+#     # p = subprocess.Popen(...)
+#     # """
+#     # A None value indicates that the process hasn't terminated yet.
+#     # """
+#     # poll = p.poll()
+#     # if poll == None:
+#     spider_name = "search"
+#     subprocess.check_output(['scrapy', 'crawl', spider_name])
+#
+#     return redirect('http://127.0.0.1:5000/view')
     # with open("output.json") as items_file:
     #     return items_file.read()
 

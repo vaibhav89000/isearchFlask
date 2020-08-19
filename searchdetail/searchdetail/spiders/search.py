@@ -50,61 +50,63 @@ class SearchSpider(scrapy.Spider):
         if (index > 0):
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
-        firstinput = os.path.abspath(os.curdir) + "\country.txt"
-        f = open(firstinput, "r")
-        country_name = f.read().splitlines()
 
-        secondinput = os.path.abspath(os.curdir) + "\keyword.txt"
-        f = open(secondinput, "r")
-        keyword_name = f.read().splitlines()
+        if (os.stat('country.txt').st_size != 0 and os.stat('keyword.txt').st_size != 0 and os.stat('city.txt').st_size != 0):
+            firstinput = os.path.abspath(os.curdir) + "\country.txt"
+            f = open(firstinput, "r")
+            country_name = f.read().splitlines()
 
-        thirdinput = os.path.abspath(os.curdir) + "\city.txt"
-        f = open(thirdinput, "r")
-        city_name = f.read().splitlines()
+            secondinput = os.path.abspath(os.curdir) + "\keyword.txt"
+            f = open(secondinput, "r")
+            keyword_name = f.read().splitlines()
 
-        WebDriverWait(driver, 100).until(
-            EC.presence_of_element_located((By.ID, "searchbutton"))
-        )
+            thirdinput = os.path.abspath(os.curdir) + "\city.txt"
+            f = open(thirdinput, "r")
+            city_name = f.read().splitlines()
 
-        # print('\n'*2)
-        # print(driver.current_url)
-        # print('\n' * 2)
-        # time.sleep(10)
-        self.website_type.clear()
-        self.website_name.clear()
-        self.duplicate.clear()
-        self.country = ''
-        self.keyword = ''
-        self.city = ''
+            WebDriverWait(driver, 100).until(
+                EC.presence_of_element_located((By.ID, "searchbutton"))
+            )
 
-        length = len(country_name)
-        print("\n" * 2)
-        print(index, length)
-        print("\n" * 2)
+            # print('\n'*2)
+            # print(driver.current_url)
+            # print('\n' * 2)
+            # time.sleep(10)
+            self.website_type.clear()
+            self.website_name.clear()
+            self.duplicate.clear()
+            self.country = ''
+            self.keyword = ''
+            self.city = ''
 
-        if (index < length):
+            length = len(country_name)
+            print("\n" * 2)
+            print(index, length)
+            print("\n" * 2)
+
+            # if (index < length):
             print("\n" * 2)
             print('passed values')
             print("\n" * 2)
             driver.find_element_by_xpath('//*[@id="countrytags"]').clear()
             search_input1 = driver.find_element_by_xpath('//*[@id="countrytags"]')
-            search_input1.send_keys(country_name[index])
+            search_input1.send_keys(country_name[0])
 
             driver.find_element_by_xpath('//*[@id="searchinput"]').clear()
             search_input2 = driver.find_element_by_xpath('//*[@id="searchinput"]')
-            search_input2.send_keys(keyword_name[index])
+            search_input2.send_keys(keyword_name[0])
 
             driver.find_element_by_xpath('//*[@id="city"]').clear()
             search_input3 = driver.find_element_by_xpath('//*[@id="city"]')
-            search_input3.send_keys(city_name[index])
+            search_input3.send_keys(city_name[0])
             search_button = driver.find_element_by_xpath('//*[@id="searchbutton"]')
             search_button.click()
             time.sleep(4)
             driver.switch_to_window(driver.window_handles[1])
             driver = response.meta['driver']
-            self.country = country_name[index]
-            self.keyword = keyword_name[index]
-            self.city = city_name[index]
+            self.country = country_name[0]
+            self.keyword = keyword_name[0]
+            self.city = city_name[0]
             index += 1
 
             #for check
@@ -113,15 +115,75 @@ class SearchSpider(scrapy.Spider):
             print('\n' * 2)
             print('Above yield to parse_page')
             print('\n' * 2)
-            yield SeleniumRequest(
-                url=driver.current_url,
-                wait_time=1000,
-                screenshot=True,
-                callback=self.parse_page,
-                errback=self.errback_parse_page,
-                meta={'index': index,'dont_merge_cookies': True},
-                dont_filter=True
-            )
+
+            country_name.pop(0)
+            keyword_name.pop(0)
+            city_name.pop(0)
+
+            if(len(country_name)>0 and len(keyword_name)>0 and len(city_name)>0):
+
+                with open('country.txt', 'w') as f:
+                    f.write('')
+
+                new_country = ''
+                for b in country_name:
+                    new_country += b + "\n"
+
+                with open('country.txt', 'a') as f:
+                    f.write(str(new_country))
+
+                with open('city.txt', 'w') as f:
+                    f.write('')
+
+                new_city = ''
+                for b in city_name:
+                        new_city += b + "\n"
+
+                with open('city.txt', 'a') as f:
+                    f.write(str(new_city))
+
+
+                with open('keyword.txt', 'w') as f:
+                    f.write('')
+
+                new_keyword = ''
+                for b in keyword_name:
+                        new_keyword += b + "\n"
+
+                with open('keyword.txt', 'a') as f:
+                    f.write(str(new_keyword))
+
+                yield SeleniumRequest(
+                    url=driver.current_url,
+                    wait_time=1000,
+                    screenshot=True,
+                    callback=self.parse_page,
+                    errback=self.errback_parse_page,
+                    meta={'index': index,'dont_merge_cookies': True},
+                    dont_filter=True
+                )
+            else:
+                with open('keyword.txt', 'w') as f:
+                    f.write('')
+
+                with open('country.txt', 'w') as f:
+                    f.write('')
+
+                with open('city.txt', 'w') as f:
+                    f.write('')
+
+
+                yield SeleniumRequest(
+                    url=driver.current_url,
+                    wait_time=1000,
+                    screenshot=True,
+                    callback=self.parse_page,
+                    errback=self.errback_parse_page,
+                    meta={'index': index, 'dont_merge_cookies': True},
+                    dont_filter=True
+                )
+
+
 
     def parse_page(self, response):
         Searchdetails_item = SearchdetailItem()

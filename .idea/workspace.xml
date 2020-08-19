@@ -10,7 +10,6 @@
       <change beforePath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchdetail/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchdetail/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchdetail/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,17 +69,17 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="549" y="168" key="FileChooserDialogImpl" timestamp="1596815944816">
+    <state x="549" y="168" key="FileChooserDialogImpl" timestamp="1597350362964">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596815944816" />
+    <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1597350362964" />
     <state x="277" y="56" key="SettingsEditor" timestamp="1596726501499">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="56" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1596726501499" />
-    <state x="465" y="238" key="com.intellij.ide.util.TipDialog" timestamp="1596814954807">
+    <state x="465" y="238" key="com.intellij.ide.util.TipDialog" timestamp="1597849487056">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="465" y="238" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1596814954807" />
+    <state x="465" y="238" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1597849487056" />
   </component>
 </project>

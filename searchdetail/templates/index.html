@@ -41,6 +41,20 @@
           </thead>
           <tbody>
           <a href="/home" ><button class=grey style="height:75px;width:80px">back</button></a>
+            <br>
+            <br>
+          <a href="/delete" ><button class=grey style="height:75px;width:80px">Delete All</button></a>
+            <br>
+            <br>
+          <a href="/csv" ><button class=grey style="height:75px;width:80px">To CSV</button></a>
+          <br>
+          <br>
+          <form action="/deletebysearch" method="POST">
+          <label for="keyword delete">keyword delete</label>
+          <input name="del">
+          <input type="submit">
+          </form>
+
 
           {% for row in rows %}
           <tr>

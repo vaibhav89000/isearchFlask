@@ -1,5 +1,6 @@
 import subprocess
 import sqlite3
+import pandas as pd
 from flask import Flask,request,render_template,redirect
 import os
 # import requests
@@ -99,8 +100,52 @@ def view_get():
     cur.execute("select * from detail")
     rows = cur.fetchall()
 
-
     return render_template("index.html", rows=rows)
+
+@app.route("/delete")
+def delete_all():
+    con = sqlite3.connect("searchdetail.db")
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    cur.execute("select * from detail")
+
+    cur.execute('DELETE FROM detail;', )
+    # rows = cur.fetchall()
+    con.commit()
+
+    return render_template("home.html")
+
+
+@app.route("/csv")
+def csv():
+    con = sqlite3.connect("searchdetail.db")
+    con.row_factory = sqlite3.Row
+
+    df = pd.read_sql_query("SELECT * FROM detail", con)
+    print(df)
+    print(type(df))
+    df.to_csv('details.csv', index=False)
+
+    return render_template("home.html")
+
+
+@app.route("/deletebysearch", methods=['POST'])
+def deletebysearch():
+    key = request.form['del']
+    print(key)
+    print(type(key))
+    sqliteConnection = sqlite3.connect('searchdetail.db')
+    cursor = sqliteConnection.cursor()
+
+    # sql_delete_query = "SELECT * FROM detail WHERE keyword LIKE '%Dentist%'"
+    # query = str("DELETE FROM detail WHERE keyword LIKE"+ " %{".format(key))
+    query = "DELETE FROM detail WHERE keyword LIKE '%{}%'".format(key)
+    sql_delete_query = query
+    cursor.execute(sql_delete_query)
+    sqliteConnection.commit()
+
+    return render_template("home.html")
+
 
 @app.route("/view", methods=['POST'])
 def view():

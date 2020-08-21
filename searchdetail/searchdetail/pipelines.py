@@ -17,15 +17,15 @@ class SearchdetailPipeline(object):
         self.curr = self.conn.cursor()
 
     def create_table(self):
-        self.curr.execute("""DROP TABLE IF EXISTS detail""")
-        self.curr.execute("""create table detail(
-        url text,
-        email text,
-        country text,
-        keyword text,
-        city text,
-        type text
-        )""")
+        # self.curr.execute("""DROP TABLE IF EXISTS detail""")
+        # self.curr.execute("""create table detail(
+        # url text,
+        # email text,
+        # country text,
+        # keyword text,
+        # city text,
+        # type text
+        # )""")
 
         # self.curr.execute("""DROP TABLE IF EXISTS detail""")
         # self.curr.execute("""create table detail(

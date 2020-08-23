@@ -126,7 +126,7 @@ def csv():
     print(type(df))
     df.to_csv('details.csv', index=False)
 
-    return render_template("home.html")
+    return redirect('http://127.0.0.1:5000/home')
 
 
 @app.route("/deletebysearch", methods=['POST'])

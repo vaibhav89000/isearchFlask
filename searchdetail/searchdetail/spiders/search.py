@@ -51,7 +51,7 @@ class SearchSpider(scrapy.Spider):
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
 
-        if (os.stat('country.txt').st_size != 0 and os.stat('keyword.txt').st_size != 0 and os.stat('city.txt').st_size != 0):
+        if (os.stat(os.path.abspath(os.curdir)+'\country.txt').st_size != 0 and os.stat(os.path.abspath(os.curdir)+'\keyword.txt').st_size != 0 and os.stat(os.path.abspath(os.curdir)+'\city.txt').st_size != 0):
             firstinput = os.path.abspath(os.curdir) + "\country.txt"
             f = open(firstinput, "r")
             country_name = f.read().splitlines()
@@ -95,7 +95,17 @@ class SearchSpider(scrapy.Spider):
             index += 1
 
 
-            if(self.country!='' or self.keyword!='' or self.city!=''):
+            if(self.country=='' or self.keyword=='' or self.city==''):
+
+                country_name.pop(0)
+                keyword_name.pop(0)
+                city_name.pop(0)
+
+            if (len(country_name) > 0 and len(keyword_name) > 0 and len(city_name) > 0):
+                self.country = country_name[0]
+                self.keyword = keyword_name[0]
+                self.city = city_name[0]
+
                 driver.find_element_by_xpath('//*[@id="countrytags"]').clear()
                 search_input1 = driver.find_element_by_xpath('//*[@id="countrytags"]')
                 search_input1.send_keys(country_name[0])
@@ -127,35 +137,35 @@ class SearchSpider(scrapy.Spider):
 
                 if(len(country_name)>0 and len(keyword_name)>0 and len(city_name)>0):
 
-                    with open('country.txt', 'w') as f:
+                    with open(os.path.abspath(os.curdir)+'\country.txt', 'w') as f:
                         f.write('')
 
                     new_country = ''
                     for b in country_name:
                         new_country += b + "\n"
 
-                    with open('country.txt', 'a') as f:
+                    with open(os.path.abspath(os.curdir)+'\country.txt', 'a') as f:
                         f.write(str(new_country))
 
-                    with open('city.txt', 'w') as f:
+                    with open(os.path.abspath(os.curdir)+'\city.txt', 'w') as f:
                         f.write('')
 
                     new_city = ''
                     for b in city_name:
                             new_city += b + "\n"
 
-                    with open('city.txt', 'a') as f:
+                    with open(os.path.abspath(os.curdir)+'\city.txt', 'a') as f:
                         f.write(str(new_city))
 
 
-                    with open('keyword.txt', 'w') as f:
+                    with open(os.path.abspath(os.curdir)+'\keyword.txt', 'w') as f:
                         f.write('')
 
                     new_keyword = ''
                     for b in keyword_name:
                             new_keyword += b + "\n"
 
-                    with open('keyword.txt', 'a') as f:
+                    with open(os.path.abspath(os.curdir)+'\keyword.txt', 'a') as f:
                         f.write(str(new_keyword))
 
                     yield SeleniumRequest(
@@ -168,13 +178,13 @@ class SearchSpider(scrapy.Spider):
                         dont_filter=True
                     )
                 else:
-                    with open('keyword.txt', 'w') as f:
+                    with open(os.path.abspath(os.curdir)+'\keyword.txt', 'w') as f:
                         f.write('')
 
-                    with open('country.txt', 'w') as f:
+                    with open(os.path.abspath(os.curdir)+'\country.txt', 'w') as f:
                         f.write('')
 
-                    with open('city.txt', 'w') as f:
+                    with open(os.path.abspath(os.curdir)+'\city.txt', 'w') as f:
                         f.write('')
 
 
@@ -187,63 +197,63 @@ class SearchSpider(scrapy.Spider):
                         meta={'index': index},
                         dont_filter=True
                     )
-            else:
-                country_name.pop(0)
-                keyword_name.pop(0)
-                city_name.pop(0)
-                if (len(country_name) > 0 and len(keyword_name) > 0 and len(city_name) > 0):
-
-                    with open('country.txt', 'w') as f:
-                        f.write('')
-
-                    new_country = ''
-                    for b in country_name:
-                        new_country += b + "\n"
-
-                    with open('country.txt', 'a') as f:
-                        f.write(str(new_country))
-
-                    with open('city.txt', 'w') as f:
-                        f.write('')
-
-                    new_city = ''
-                    for b in city_name:
-                        new_city += b + "\n"
-
-                    with open('city.txt', 'a') as f:
-                        f.write(str(new_city))
-
-                    with open('keyword.txt', 'w') as f:
-                        f.write('')
-
-                    new_keyword = ''
-                    for b in keyword_name:
-                        new_keyword += b + "\n"
-
-                    with open('keyword.txt', 'a') as f:
-                        f.write(str(new_keyword))
-                    print('\n')
-                    print('empty ',country_name,city_name,keyword_name)
-                    print('\n')
-
-                    yield SeleniumRequest(
-                        url='https://www.google.com/',
-                        wait_time=1000,
-                        screenshot=True,
-                        callback=self.gotspace,
-                        errback=self.err_gotspace,
-                        meta={'index': index},
-                        dont_filter=True
-                    )
-                else:
-                    with open('keyword.txt', 'w') as f:
-                        f.write('')
-
-                    with open('country.txt', 'w') as f:
-                        f.write('')
-
-                    with open('city.txt', 'w') as f:
-                        f.write('')
+            # else:
+            #     country_name.pop(0)
+            #     keyword_name.pop(0)
+            #     city_name.pop(0)
+            #     if (len(country_name) > 0 and len(keyword_name) > 0 and len(city_name) > 0):
+            #
+            #         with open('country.txt', 'w') as f:
+            #             f.write('')
+            #
+            #         new_country = ''
+            #         for b in country_name:
+            #             new_country += b + "\n"
+            #
+            #         with open('country.txt', 'a') as f:
+            #             f.write(str(new_country))
+            #
+            #         with open('city.txt', 'w') as f:
+            #             f.write('')
+            #
+            #         new_city = ''
+            #         for b in city_name:
+            #             new_city += b + "\n"
+            #
+            #         with open('city.txt', 'a') as f:
+            #             f.write(str(new_city))
+            #
+            #         with open('keyword.txt', 'w') as f:
+            #             f.write('')
+            #
+            #         new_keyword = ''
+            #         for b in keyword_name:
+            #             new_keyword += b + "\n"
+            #
+            #         with open('keyword.txt', 'a') as f:
+            #             f.write(str(new_keyword))
+            #         print('\n')
+            #         print('empty ',country_name,city_name,keyword_name)
+            #         print('\n')
+            #
+            #         yield SeleniumRequest(
+            #             url='https://www.google.com/',
+            #             wait_time=1000,
+            #             screenshot=True,
+            #             callback=self.gotspace,
+            #             errback=self.err_gotspace,
+            #             meta={'index': index},
+            #             dont_filter=True
+            #         )
+            #     else:
+            #         with open('keyword.txt', 'w') as f:
+            #             f.write('')
+            #
+            #         with open('country.txt', 'w') as f:
+            #             f.write('')
+            #
+            #         with open('city.txt', 'w') as f:
+            #             f.write('')
 
 
 
@@ -289,16 +299,16 @@ class SearchSpider(scrapy.Spider):
                     EC.presence_of_element_located((By.ID, "tvcap"))
                 )
             except:
-                html = driver.page_source
-                response_obj = Selector(text=html)
-
-                url = response_obj.xpath("//div/div/text()").extract()
-                new_url=url[-2].split(' ')
-                print("\n"*2)
-                print('check this url',new_url)
-                print("\n" * 2)
-                body = driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL+'t')
-                driver.get(new_url[1])
+                # html = driver.page_source
+                # response_obj = Selector(text=html)
+                #
+                # url = response_obj.xpath("//div/div/text()").extract()
+                # new_url=url[-2].split(' ')
+                # print("\n"*2)
+                # print('check this url',new_url)
+                # print("\n" * 2)
+                # body = driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL+'t')
+                # driver.get(new_url[1])
 
                 # driver.switch_to_window(driver.window_handles[2])
                 # time.sleep(10)
@@ -731,28 +741,28 @@ class SearchSpider(scrapy.Spider):
             dont_filter=True
         )
 
-    def gotspace(self,response):
-        index = response.meta['index']
-        print('\n'*2)
-        print('in gotspace')
-        yield SeleniumRequest(
-            url='http://isearchfrom.com/',
-            wait_time=1000,
-            screenshot=True,
-            callback=self.parse,
-            errback=self.err_gotspace,
-            meta={'index': index},
-            dont_filter=True
-        )
-
-    def err_gotspace(self,failure):
-        meta = failure.request.meta
-        yield SeleniumRequest(
-            url='https://www.google.com/',
-            wait_time=1000,
-            screenshot=True,
-            callback=self.gotspace,
-            errback=self.err_gotspace,
-            meta=meta,
-            dont_filter=True
-        )
+    # def gotspace(self,response):
+    #     index = response.meta['index']
+    #     print('\n'*2)
+    #     print('in gotspace')
+    #     yield SeleniumRequest(
+    #         url='http://isearchfrom.com/',
+    #         wait_time=1000,
+    #         screenshot=True,
+    #         callback=self.parse,
+    #         errback=self.err_gotspace,
+    #         meta={'index': index},
+    #         dont_filter=True
+    #     )
+    #
+    # def err_gotspace(self,failure):
+    #     meta = failure.request.meta
+    #     yield SeleniumRequest(
+    #         url='https://www.google.com/',
+    #         wait_time=1000,
+    #         screenshot=True,
+    #         callback=self.gotspace,
+    #         errback=self.err_gotspace,
+    #         meta=meta,
+    #         dont_filter=True
+    #     )

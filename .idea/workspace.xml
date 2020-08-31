@@ -5,11 +5,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchdetail/city.txt" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/city.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchdetail/country.txt" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/country.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchdetail/details.csv" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/details.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchdetail/keyword.txt" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/keyword.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchdetail/searchdetail.db" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/searchdetail.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/search.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchdetail/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchdetail/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchdetail/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +34,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../hotfrog" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">

@@ -1,7 +1,7 @@
 import subprocess
 import sqlite3
 import pandas as pd
-from flask import Flask,request,render_template,redirect
+from flask import Flask,request,render_template,redirect,send_file
 import os
 # import requests
 app = Flask(__name__)
@@ -121,17 +121,32 @@ def delete_all():
     return redirect('http://127.0.0.1:5000/view')
 
 
+# @app.route("/csv")
+# def csv():
+#     con = sqlite3.connect(os.path.abspath(os.curdir)+"\searchdetail.db")
+#     con.row_factory = sqlite3.Row
+#
+#     df = pd.read_sql_query("SELECT * FROM detail", con)
+#     print(df)
+#     print(type(df))
+#     df.to_csv(os.path.abspath(os.curdir)+'\details.csv', index=False)
+#
+#     return redirect('http://127.0.0.1:5000/view')
+
 @app.route("/csv")
-def csv():
-    con = sqlite3.connect(os.path.abspath(os.curdir)+"\searchdetail.db")
+def download_csv():
+    con = sqlite3.connect(os.path.abspath(os.curdir) + "\searchdetail.db")
     con.row_factory = sqlite3.Row
 
     df = pd.read_sql_query("SELECT * FROM detail", con)
     print(df)
     print(type(df))
-    df.to_csv(os.path.abspath(os.curdir)+'\details.csv', index=False)
+    df.to_csv(os.path.abspath(os.curdir) + '\details.csv', index=False)
 
-    return redirect('http://127.0.0.1:5000/view')
+    return send_file(os.path.abspath(os.curdir)+'\details.csv',
+                     mimetype='text/csv',
+                     attachment_filename=os.path.abspath(os.curdir)+'\details.csv',
+                     as_attachment=True)
 
 
 @app.route("/deletebysearch", methods=['POST'])

@@ -1,8 +1,9 @@
 import subprocess
 import sqlite3
 import pandas as pd
-from flask import Flask,request,render_template,redirect,send_file
+from flask import Flask,request,render_template,redirect,send_file,send_from_directory
 import os
+import time
 # import requests
 app = Flask(__name__)
 
@@ -71,32 +72,6 @@ def my_form_post():
     # return render_template('home.html', find=find,near=near)
     return redirect('http://127.0.0.1:5000/home')
 
-
-# @app.route('/run')
-# def run():
-#     """
-#     Run spider in another process and store items in file. Simply issue command:
-#
-#     > scrapy crawl dmoz -o "output.json"
-#
-#     wait for  this command to finish, and read output.json to client.
-#     """
-#
-#     # p = subprocess.Popen(...)
-#     # """
-#     # A None value indicates that the process hasn't terminated yet.
-#     # """
-#     # poll = p.poll()
-#     # if poll == None:
-#     spider_name = "search"
-#     subprocess.check_output(['scrapy', 'crawl', spider_name])
-#
-#     return redirect('http://127.0.0.1:5000/view')
-    # with open("output.json") as items_file:
-    #     return items_file.read()
-
-
-
 @app.route("/view")
 def view_get():
     con = sqlite3.connect(os.path.abspath(os.curdir)+"\searchdetail.db")
@@ -121,32 +96,45 @@ def delete_all():
     return redirect('http://127.0.0.1:5000/view')
 
 
-# @app.route("/csv")
-# def csv():
-#     con = sqlite3.connect(os.path.abspath(os.curdir)+"\searchdetail.db")
-#     con.row_factory = sqlite3.Row
-#
-#     df = pd.read_sql_query("SELECT * FROM detail", con)
-#     print(df)
-#     print(type(df))
-#     df.to_csv(os.path.abspath(os.curdir)+'\details.csv', index=False)
-#
-#     return redirect('http://127.0.0.1:5000/view')
-
-@app.route("/csv")
-def download_csv():
-    con = sqlite3.connect(os.path.abspath(os.curdir) + "\searchdetail.db")
+@app.route("/convertcsv")
+def csv():
+    con = sqlite3.connect(os.path.abspath(os.curdir)+"\searchdetail.db")
     con.row_factory = sqlite3.Row
 
     df = pd.read_sql_query("SELECT * FROM detail", con)
     print(df)
     print(type(df))
-    df.to_csv(os.path.abspath(os.curdir) + '\details.csv', index=False)
 
-    return send_file(os.path.abspath(os.curdir)+'\details.csv',
-                     mimetype='text/csv',
-                     attachment_filename=os.path.abspath(os.curdir)+'\details.csv',
-                     as_attachment=True)
+    with open(os.path.abspath(os.curdir)+'\static\details.csv', "w") as my_empty_csv:
+        # now you have an empty file already
+        pass
+
+    df.to_csv(os.path.abspath(os.curdir)+'\static\details.csv', index=False)
+
+    return redirect('http://127.0.0.1:5000/view')
+
+# @app.route("/down")
+# def downloadcsv():
+#     con = sqlite3.connect(os.path.abspath(os.curdir) + "\searchdetail.db")
+#     con.row_factory = sqlite3.Row
+#
+#     df = pd.read_sql_query("SELECT * FROM detail", con)
+#     print(df)
+#     print(type(df))
+#     df.to_csv(os.path.abspath(os.curdir) + '\details.csv', index=False)
+#     time.sleep(20)
+#     print("for downloading csv")
+# #
+#     return send_file(os.path.abspath(os.curdir)+'\static\details.csv',
+#                      mimetype='text/csv',
+#                      attachment_filename='details',
+#                      as_attachment=True)
+    # print('hi')
+    # return send_file(os.path.abspath(os.curdir)+'\static\details.csv',mimetype='text/csv',
+    #                      attachment_filename='details.csv',as_attachment=True)
+    # filename = 'details.csv'
+    # uploads = os.path.abspath(os.curdir)+'\static'
+    # return send_from_directory(directory=uploads, filename=filename)
 
 
 @app.route("/deletebysearch", methods=['POST'])

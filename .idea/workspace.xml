@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="759553a1-c1ee-43d0-8409-c5e7979371fd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/searchfour.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/searchfour.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/searchthree.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/searchthree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/searchtwo.py" beforeDir="false" afterPath="$PROJECT_DIR$/searchdetail/searchdetail/spiders/searchtwo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +31,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../hotfrog" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
